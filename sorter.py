@@ -26,9 +26,6 @@ for item in dir_list:
         if image_type in item:
             if not "health-" in item:
                 image_dir_list.append(item)
-
-print(image_dir_list)
-
 class TextBox:
     def __init__(self, x = 0, y= 0, font_size = 64, font_colour = (0, 0, 0), text="Placeholder"):
         self.x = x
@@ -141,14 +138,18 @@ class InputBox:
         text_surface = self.font.render(self.text, True, (0, 0, 0))
         win.blit(text_surface, (self.x + 5, self.y + 5))
 
-title_textbox = TextBox(x=150, y=75, font_size=30, font_colour=(30, 30, 30), text="Image Sorter")
+title_textbox = TextBox(x=500, y=25, font_size=60, font_colour=(30, 30, 30), text="Image Sorter")
+health_textbox = TextBox(x=150, y=90, font_size=30, font_colour=(30, 30, 30), text="Cell Health:")
+
 health_button = Button(x=320, y=150, font_size=75, item_id="submit", active_font=(220, 220, 220), passive_colour=(75, 75, 75), active_colour=(38, 38, 38), icon="+")
 health_inputbox = InputBox(x=100, y=150, width=200 + width_scaler, height=48, passive_colour=(50, 50, 50), active_colour=(0, 0, 0))
 
-render_queue = (title_textbox, health_button, health_inputbox)
+previous_button = Button(x=100, y=240, font_size=50, item_id="prev", active_font=(220, 220, 220), passive_colour=(75, 75, 75), active_colour=(38, 38, 38), icon="Prev")
+next_button = Button(x=200, y=240, font_size=50, item_id="next", active_font=(220, 220, 220), passive_colour=(75, 75, 75), active_colour=(38, 38, 38), icon="Next")
+
+render_queue = (title_textbox, health_textbox, health_button, health_inputbox, previous_button, next_button)
 
 while run:
-
     event_handler = []
     win.fill((255,255,255))
 
@@ -165,19 +166,27 @@ while run:
 
     current_image = pygame.image.load(f"{main_path}/{image_dir_list[image_index]}")
     scaled_current_image = pygame.transform.scale(current_image, (768 + width_scaler, 432 + int(height_scaler / 2)))
-    win.blit(scaled_current_image, (430, 70))
+    win.blit(scaled_current_image, (430, 80))
 
     for obj in render_queue:
         event_handler.append(obj.draw(win))
 
     if "submit" in event_handler:
-        print(textbox_handler[0])
         os.rename(f"{main_path}/{image_dir_list[image_index]}", f"{main_path}/health-{textbox_handler[0]}-{image_dir_list[image_index]}")
         image_index += 1
         health_inputbox.reset()
         time.sleep(0.1)
 
-    
+    if "next" in event_handler:
+        if len(image_dir_list) != image_index + 1:
+            print(len(image_dir_list), image_index)
+            image_index += 1
+        time.sleep(0.1)
 
-    clock.tick(60)
+
+    if "prev" in event_handler and image_index > 0:
+        image_index += -1
+        time.sleep(0.1)
+
+
     pygame.display.update()
