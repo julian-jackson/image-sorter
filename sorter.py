@@ -24,7 +24,8 @@ image_types = [".png", ".jpeg", ".jpg"]
 for item in dir_list:
     for image_type in image_types:
         if image_type in item:
-            image_dir_list.append(item)
+            if not "health-" in item:
+                image_dir_list.append(item)
 
 print(image_dir_list)
 
@@ -108,7 +109,6 @@ class InputBox:
     
     def reset(self):
         self.text = "0."
-
             
     def keydown_update(self, event):
         keys = pygame.key.get_pressed()
@@ -172,7 +172,7 @@ while run:
 
     if "submit" in event_handler:
         print(textbox_handler[0])
-        os.rename(f"{main_path}/{image_dir_list[image_index]}", f"{main_path}/health-{textbox_handler[0]}-{image_dir_list[image_index]}")
+        os.rename(f"{main_path}/{image_dir_list[image_index]}", f"{main_path}/{textbox_handler[0]}-{image_dir_list[image_index]}")
         image_index += 1
         health_inputbox.reset()
         time.sleep(0.1)
