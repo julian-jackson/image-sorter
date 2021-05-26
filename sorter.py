@@ -172,7 +172,7 @@ while run:
 
     if "submit" in event_handler:
         print(textbox_handler[0])
-        os.rename(f"{main_path}/{image_dir_list[image_index]}", f"{main_path}/{textbox_handler[0]}-{image_dir_list[image_index]}")
+        os.rename(f"{main_path}/{image_dir_list[image_index]}", f"{main_path}/health-{textbox_handler[0]}-{image_dir_list[image_index]}")
         image_index += 1
         health_inputbox.reset()
         time.sleep(0.1)
